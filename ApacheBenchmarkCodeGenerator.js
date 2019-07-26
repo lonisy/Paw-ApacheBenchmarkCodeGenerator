@@ -17,7 +17,7 @@
 	              postdata.push(name + "=" + value)
 	            }
 	      }
-		  command += 'echo "'+postdata.join("&")+'" > form-data.txt' + "\n\n";
+	  command += 'echo "'+postdata.join("&")+'" > form-data.txt' + "\n\n";
       }  
       command += "ab -c" + (self.options.concurrency || self.default_concurrency);
       command += " -n" + (self.options.request_count || self.default_request_count);
