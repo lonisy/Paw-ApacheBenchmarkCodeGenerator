@@ -7,10 +7,23 @@
     this.default_concurrency = 100;
 
     this.generateCommand = function(request) {
-      var command = "# " + request.name + "\n";
+      var command = "# " + request.name + "\n\n";
+      var postdata = [];
+      if (request.method == "POST") {
+      	  url_encoded_body = request.urlEncodedBody;
+	      if (url_encoded_body) {
+	        for (name in url_encoded_body) {
+	              value = url_encoded_body[name];
+	              postdata.push(name + "=" + value)
+	            }
+	      }
+		  command += 'echo "'+postdata.join("&")+'" > form-data.txt' + "\n\n";
+      }  
       command += "ab -c" + (self.options.concurrency || self.default_concurrency);
       command += " -n" + (self.options.request_count || self.default_request_count);
-      command += " -m" + request.method;
+      if (request.method == "POST"){
+		      command += " -p form-data.txt"
+      }
 
       var header_name;
       for (header_name in request.headers) {
